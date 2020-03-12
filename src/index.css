@@ -1,0 +1,21 @@
+.App {
+  /* font-family: sans-serif; */
+  /* text-align: center; */
+  /* display: flex;
+  flex-direction: row;
+  margin : auto;
+  justifyContent: center;
+  alignItems: center  */
+}
+
+.mainloop {
+  display: flex;
+  border: 1px solid black;
+}
+
+
+
+
+/* .pads{
+  background-color: red;
+} */
