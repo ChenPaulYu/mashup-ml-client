@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Sequencer from './Sequencer';
 import Loops from './component/Loops'
-import { Transport } from "tone";
 
 
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
@@ -29,7 +28,6 @@ class App extends Component {
 
   getMainLoop(number) {
     let url = `http://140.109.21.190:5000/get_main_loop/${number}`
-
     fetch(url, { method: 'GET' }).then((response) => {
       if (!response.ok) throw new Error(response.statusText)
       return response.json()
@@ -103,9 +101,6 @@ class App extends Component {
 
  
 
-  // componentDidUpdate() {
-  //   console.log(this.state.loadStatue)
-  // }
 
   componentDidMount(){
     this.getMainLoop(4)

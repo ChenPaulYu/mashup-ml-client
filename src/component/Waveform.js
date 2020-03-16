@@ -48,26 +48,29 @@ class Waveform extends Component {
     }
 
     canvasClick() {
-        if(this.state.value == 1) {
+        if (this.state.value == 1) {
             this.disconnectAudio()
-            this.state.chooseColumn(-1) 
+            this.state.chooseColumn(-1)
         } else {
             this.state.chooseColumn(this.state.index)
             if(Transport.state == 'stopped') {
-                Transport.start()
+                // Transport.start()
             }
         }
     }
 
     connectAudio() {
-        if(this.state.player) {
+        if (this.state.player) {
             this.state.player.loop = true
             if (Transport.state == 'stopped') {
-                this.state.player.sync().start()
+                this.state.player.start()
+                // this.state.player.sync().start()
             } else {
-                console.log('here')
                 console.log(this.state.player.buffer.duration)
-                this.state.player.seek().sync().restart(Transport.seconds % this.state.player.buffer.duration)
+                this.state.player.sync()
+                Transport.start()
+                // this.state.player.sync().restart(Transport.seconds % this.state.player.buffer.duration)
+
             }
             this.state.player.mute = false
         }
@@ -93,12 +96,27 @@ class Waveform extends Component {
         }
     }
 
-    componentDidUpdate(prevProps, prevState) {  
+    componentDidUpdate(prevProps, prevState) {
+
+        
         if (prevProps == this.props) return
 
-        const { index, url, value, colors, chooseColumn, group_index, currentLoadStatue, sequencer, lockStatue } = this.props
+        const { index, url, value, colors, chooseColumn, group_index, currentLoadStatue, sequencer, lockStatue, mute } = this.props
+
+        if (this.state.player) {
+            if (mute == 1) {
+                console.log('mute')
+                this.state.player.mute = true
+            } else {
+                this.state.player.mute = false
+            }
+
+        }
+
+
+
         if (url != null && (!this.state.player || currentLoadStatue) && lockStatue[group_index] != 1) {
-            if (prevState.url == url && currentLoadStatue != 1) return 
+            if (prevState.url == url && currentLoadStatue != 1) return
             var player = new Player(`${ROOT_URL}?url=${url}`, () => {
                 let data = player.buffer.getChannelData()
                 this.drawWaveform(data, this.canvas.width, this.canvas.height, colors[0])
@@ -108,12 +126,12 @@ class Waveform extends Component {
             })
         }
 
-        this.setState({ url, value, index, colors, chooseColumn, group_index, currentLoadStatue })
+        this.setState({ url, value, index, colors, chooseColumn, group_index, currentLoadStatue, mute })
 
         if (this.state.player) {
             if (value == 1) {
                 this.drawWaveform(this.state.data, this.canvas.width, this.canvas.height, colors[1])
-                if (lockStatue[group_index] == 1) return    
+                if (lockStatue[group_index] == 1) return
                 this.connectAudio()
             } else if (value == 0) {
                 this.disconnectAudio()
@@ -121,7 +139,8 @@ class Waveform extends Component {
             }
         }
 
-        if(sequencer) {
+        if (sequencer) {
+            Transport.stop()
             this.disconnectAudio()
         }
 
