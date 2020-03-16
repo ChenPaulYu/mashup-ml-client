@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from './node_modules/react';
 import Canvas from './Canvas';
 
 const OFF_COLOR = '#FFF130'

@@ -1,5 +1,5 @@
-import React, { Component} from 'react';
-import { Player, Transport } from "tone";
+import React, { Component} from './node_modules/react';
+import { Player, Transport } from "./node_modules/tone";
 
 const URL = `http://140.109.21.190:5000/download/delay.wav`
 
@@ -110,7 +110,7 @@ class Canvas extends Component {
             <canvas width={this.props.w}
                 height={this.props.h}
                 ref={x => this.canvas = x}
-                style={{ border: `1px solid ${this.props.on_color}`z`}}
+                style={{ border: `1px solid ${this.props.on_color}`, transform: `translate(${this.props.x}px, ${this.props.y}px)`}}
                 onClick={this.canvasClick}
             />
         )

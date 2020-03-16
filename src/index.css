@@ -1,21 +1,82 @@
 .App {
-  /* font-family: sans-serif; */
-  /* text-align: center; */
-  /* display: flex;
-  flex-direction: row;
-  margin : auto;
-  justifyContent: center;
-  alignItems: center  */
+  text-align: center;
 }
 
-.mainloop {
+.loops {
+   display: flex;
+   flex-direction: row;
+   margin : auto;
+   justify-content: center;
+   align-items: center;
+}
+
+
+.draw {
   display: flex;
+  width : 100px;
+  height: 100px;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+.sub-btn {
+    border: 1px solid #fff;
+    background-color: #4D352D;
+    border-radius: 5px;
+    color: #fff;
+    margin: 5px;
+    width : 60px;
+    height: 30px;
+}
+
+.main-btn {
+  border: 1px solid #fff;
+  background-color: cadetblue;
+  border-radius: 5px;
+  color: #fff;
+  margin: 5px;
+  /* width : 60px; */
+  height: 30px;
+}
+
+/* Sequencer.css */
+
+.sequencer {
+
+}
+
+.pads {
+  padding: 2px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 5px;
+  /* background-color: cadetblue; */
+}
+
+.pad {
   border: 1px solid black;
+  border-radius: 5px;
+  width : 40px;
+  height: 20px;
+  margin: 5px;
+}
+
+.progress_on {
+  background-color: #ED553B;
 }
 
 
+.progress {
+  border: 1px solid black;
+  border-radius: 5px;
+  width : 40px;
+  height: 5px;
+  margin: 5px;
+}
 
-
-/* .pads{
-  background-color: red;
-} */
+.pad_on {
+  background-color: #FFF130;
+}

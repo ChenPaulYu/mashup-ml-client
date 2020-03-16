@@ -49,13 +49,21 @@ class Canvas extends Component {
 
     canvasClick() {
 
+        if (this.state.main_playing == 1) {
+            return
+        }
+
+        if (this.state.main_playing == 0){
+            console.log('canvas clcik: ', this.state.num)
+            this.state.playloop(this.state.num)
+        }
+
         let state = this.state
         let duration = state.sound.buffer.duration
         let drawWaveform = this.drawWaveform
 
 
         if (state.sound.state == 'stopped') {
-            
             // state.sound.sync().start(0, Transport.seconds % duration)
             state.sound.sync().start()
 
@@ -63,17 +71,19 @@ class Canvas extends Component {
 
             console.log(Transport.seconds % duration)
 
-            drawWaveform(state.data, state.w, state.h, state.off_color)
-
-        } else {
-
-            let drawWaveform = this.drawWaveform
-            let state = this.state
-            state.sound.loop = false
-            state.sound.stop().unsync()
-            
             drawWaveform(state.data, state.w, state.h, state.on_color)
+        
+        } else {
+            // let drawWaveform = this.drawWaveform
+            // let state = this.state
+            // state.sound.loop = false
+            // state.sound.stop().unsync()
+            
+            // drawWaveform(state.data, state.w, state.h, state.off_color)
         }
+        
+        Transport.start()
+
     }
         
     drawWaveform(data, w, h, color) {
@@ -89,48 +99,94 @@ class Canvas extends Component {
 
     
 
-    componentDidMount() {
-        // getAudioData(URL).then(data => this.setState({ data }))
-        console.log(this.canvas.width, this.canvas.height)
-        // const { w, h, on_color, off_color, index } = this.props
-        // console.log(index)
-        // this.setState({'index': index})
-        // var sound = new Player(`${URL}?${index}`, () => {
-        //     let data = sound.buffer.getChannelData()
-        //     console.log('load sound')
-        //     this.drawWaveform(data, w, h, on_color)
-        //     sound.toMaster()
-        //     this.setState({ sound, data, on_color, off_color, w, h });
-        // }).sync()        
-    }
+    // componentDidMount() {
+    //     const { on_color, off_color, index, main_playing, playloop, num } = this.props
+    //     const w = this.canvas.width
+    //     const h = this.canvas.height
 
-    componentDidUpdate(prevProps, prevState) {
-
-        const { w, h, on_color, off_color, index } = this.props
-        if (prevProps.index == index) {
-            console.log('un-changed')
-            return 
-        } 
-        console.log('change----')
-
-        if (this.state.sound) {
-            this.state.sound.loop = false
-            this.state.sound.stop().unsync() 
-            this.setState({ 'sound': null })
-        }
+    //     this.setState({'index': index})
         
-        var sound = new Player(`${URL}?url=${index}`, () => {
-            let data = sound.buffer.getChannelData()
-            this.drawWaveform(data, this.canvas.width, this.canvas.height, on_color)
-            sound.toMaster()
-            this.setState({ sound, data, on_color, off_color, w, h });
-        }).sync()  
+    //     if (index != 'null') {
+    //         return
+    //     }
+
+        
+    //     var sound = new Player(`${URL}?url=${index}`, () => {
+    //         let data = sound.buffer.getChannelData()
+    //         this.drawWaveform(data, this.canvas.width, this.canvas.height, on_color)
+    //         sound.toMaster()
+    //         this.setState({ sound, data, on_color, off_color, w, h, main_playing, playloop, num });
+    //     }).sync()      
+    // }
+
+    componentDidUpdate(prevProps) {
+
+        const { on_color, off_color, index, main_playing, playloop, num} = this.props
+
+        const w = this.canvas.width
+        const h = this.canvas.height
+
+
+        if (prevProps.index == index && prevProps.main_playing == main_playing) {
+            return
+        } 
+
+
+
+        if (main_playing == 1) {
+            let state = this.state
+            let duration = state.sound.buffer.duration
+            let drawWaveform = this.drawWaveform
+
+            state.sound.sync().start()
+
+            state.sound.loop = true
+            state.sound.mute = false
+
+            console.log(Transport.seconds % duration)
+
+            drawWaveform(state.data, state.w, state.h, state.off_color)
+        } 
+        // else {
+
+        //     if (Object.keys(this.state).length != 0) {
+        //         let state = this.state
+        //         let drawWaveform = this.drawWaveform
+        //         state.sound.loop = false
+        //         state.sound.stop().unsync()
+
+        //         drawWaveform(state.data, state.w, state.h, state.off_color)
+        //     }
+        // }
+
+        if (prevProps.main_playing == 1 && main_playing == 0) {
+            let drawWaveform = this.drawWaveform
+            let state = this.state
+            state.sound.loop = false
+            state.sound.mute = true
+            state.sound.stop().unsync()
+            drawWaveform(state.data, state.w, state.h, state.on_color)
+        }
+
+        
+        
+
+        if (!this.state.sound || prevProps.index != index) {
+            var sound = new Player(`${URL}?url=${index}`, () => {
+                let data = sound.buffer.getChannelData()
+                this.drawWaveform(data, this.canvas.width, this.canvas.height, on_color)
+                sound.toMaster()
+                this.setState({ data, sound, data, on_color, off_color, w, h, main_playing, playloop, num });
+            }).sync()  
+        } 
+        
+
     }
 
     render() {
         return (
-            <canvas width={this.props.w}
-                height={this.props.h}
+            <canvas 
+                className='mainLoop'
                 ref={x => this.canvas = x}
                 style={{ border: `1px solid ${this.props.on_color}`, backgroundColor: `#0f4c81`}}
                 onClick={this.canvasClick}

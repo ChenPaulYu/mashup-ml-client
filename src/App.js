@@ -1,113 +1,141 @@
 import React, { Component } from 'react';
+import Sequencer from './Sequencer';
+import Loops from './component/Loops'
 import { Transport } from "tone";
-import Canvas from './Canvas'
-import Sequencer from './Sequencer'
-import './App.css';
-
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
 
 
-
+const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
 
 class App extends Component {
   constructor(props) {
-    super(props)
-    this.state = ({})
-    this.changeLoop = this.changeLoop.bind(this)
+    super(props);
+    this.state = ({
+      'loadStatue'   : [0, 0, 0, 0], // 0 -> finish, 1 -> loading
+      'lockStatue'   : [0, 0, 0, 0],
+      'groupUrls'    : [],
+      'urlsDecision' : [],
+      'sequencer'    : false
+
+    })
+
+    this.getMainLoop      = this.getMainLoop.bind(this);
+    this.updateLockStatue = this.updateLockStatue.bind(this);
+    this.updateDecision   = this.updateDecision.bind(this)
+    this.getAccompanyLoop = this.getAccompanyLoop.bind(this)
+    this.updateLoadStatue = this.updateLoadStatue.bind(this)
   }
 
-  startTransport() {
-    Transport.start()
 
-    Transport.on("loop" , t => console.log("loop: " , t, Transport.seconds))
-    Transport.on("start", t => console.log("start:", t, Transport.seconds))
-    Transport.on("stop" , t => console.log("stop: " , t, Transport.seconds))
+  getMainLoop(number) {
+    let url = `http://140.109.21.190:5000/get_main_loop/${number}`
+
+    fetch(url, { method: 'GET' }).then((response) => {
+      if (!response.ok) throw new Error(response.statusText)
+      return response.json()
+    }).then((result) => {
+      console.log('main loop')
+      this.updateLoadStatue(0, 1) // (index, value)
+      let groupUrls_update
+      if (this.state.groupUrls[0]) {
+        groupUrls_update    = [result.main]
+      } else {
+        groupUrls_update    = this.state.groupUrls
+        groupUrls_update[0] = result.main 
+      }
+      this.setState({'groupUrls': groupUrls_update})
+    })
   }
 
-  getMainLoop() {
-    let url = `http://140.109.21.190:5000/get_main_loop`
-    fetch(url, { method: 'GET' }) .then((response) => {
-        if (!response.ok) throw new Error(response.statusText)
+  getAccompanyLoop(index, url) {
+    let mashup_url = `http://140.109.21.190:5000/get_mashup_result?url=${url}&num=${100}`
+    if (this.state.groupUrls.length == index+1) {
+      this.state.groupUrls.push([])
+      this.setState({ 'groupUrls': this.state.groupUrls })      
+    }
+
+
+
+    fetch(mashup_url, { method: 'GET' }).then((response) => {
+      if (!response.ok) throw new Error(response.statusText)
         return response.json()
       }).then((result) => {
-        console.log(result.main)
-        this.setState({'main': result.main})
-        console.log('==================')
-        console.log(result.main, this.state.main)
-        let mashup_url = `http://140.109.21.190:5000/get_mashup_result?url=${result.main}`
-        console.log('mashup_url: ' + mashup_url)
-        // fetch(mashup_url, { method: 'GET' }).then((response) => {
-        //   if (!response.ok) throw new Error(response.statusText)
-        //   return response.json()
-        // }).then((result) => {
-        //   this.setState({ 'rank': result.rank })
-        //   return result.rank
-        // })
-        return result.main
-      })
+        console.log('accompany loop')
+        this.updateLoadStatue(index + 1, 1)
+        let groupUrls_update = this.state.groupUrls
+        groupUrls_update[index + 1] = result.rank.slice(0, 4)
+        this.setState({ 'groupUrls': groupUrls_update })
+        return result.rank
+    })
   }
 
-  stopTransport() {
-    Transport.stop()
+
+  updateLoadStatue(index, value) {
+    let currentLoadStatue = this.state.loadStatue
+    currentLoadStatue[index] = value
+    this.setState({'loadStatue': currentLoadStatue})
+  }
+  
+
+  updateDecision(index, decision) {
+    if (this.state.urlsDecision.length < index + 1) {
+      this.state.urlsDecision.push(decision)
+    } else {
+      this.state.urlsDecision[index] = decision
+    }
+    this.setState({'urlsDecision': this.state.urlsDecision})
   }
 
-  changeLoop() {
-    this.getMainLoop()
-    Transport.stop()
+
+  updateLockStatue (index, value) {
+    let state = this.state
+    state.lockStatue[index] = value
+    if (state.lockStatue.reduce(reducer) == 4) {
+      this.setState({ 'lockStatue': state.lockStatue, 'sequencer': true })
+    } else {
+      if (value == 1) {
+        console.log('update lock ', index)
+        this.getAccompanyLoop(index, this.state.urlsDecision[index])
+      }
+      this.setState({ 'lockStatue': state.lockStatue })
+    }
   }
+
+ 
+
+  // componentDidUpdate() {
+  //   console.log(this.state.loadStatue)
+  // }
 
   componentDidMount(){
-      this.getMainLoop()
+    this.getMainLoop(4)
   }
-
-  componentDidUpdate() {
-    console.log('DidUpdate')
-    console.log(this.state.main)
-  }
-
-
-
-
-
 
   render() {
-    
     return (
       <div className="App"> 
-        <Canvas className='mainloop' x={0} y={0} w={830} h={100} on_color={'#F4F1EE'} off_color={'#FFF130'} index={this.state.main} />
-        {/* <Grid container spacing={0}>
-          <Grid item xs={12}>
-            <Canvas x={0} y={0} w={830} h={100} on_color={'#F4F1EE'} off_color={'#FFF130'} index={this.state.main}/>
-          </Grid>
-          <Grid item xs={3}>
-            <Canvas x={0} y={0} w={100} h={100} on_color={'#F4F1EE'} off_color={'#FFF130'} 
-            index={this.state['rank'] != undefined ? this.state.rank[0] : 0}/>
-          </Grid>
-          <Grid item xs={3}>
-            <Canvas x={62} y={0} w={100} h={100} on_color={'#F4F1EE'} off_color={'#FFF130'}
-            index={this.state['rank'] != undefined ? this.state.rank[1] : 0}/>
-          </Grid>     
-          <Grid item xs={3}>
-            <Canvas x={62} y={0} w={100} h={100} on_color={'#F4F1EE'} off_color={'#FFF130'}
-            index={this.state['rank'] != undefined ? this.state.rank[2] : 0}/>
-          </Grid> 
-          <Grid item xs={3}>
-            <Canvas x={62} y={0} w={100} h={100} on_color={'#F4F1EE'} off_color={'#FFF130'}
-            index={this.state['rank'] != undefined ? this.state.rank[3] : 0}/>
-          </Grid>      
-        </ Grid>
-        <Button color="primary" onClick={this.startTransport}>
-          Start
-        </Button>
-        <Button color="secondary" onClick={this.stopTransport}>
-          Stop
-        </Button>
-        <Button onClick={this.changeLoop}>
-          Change
-        </Button> */}
-          {/* <Sequencer /> */}
+        <h1>Interactive Beat Makers</h1>
+        { 
+          this.state.groupUrls.map((urls, index) => (
+            <Loops
+              key={index}
+              urls={urls}
+              index={index}
+              value={this.state.lockStatue[index]}
+              sequencer={this.state.sequencer}
+              currentLoadStatue={this.state.loadStatue[index]}
+              lockStatue={this.state.lockStatue}
+              updateLockStatue={this.updateLockStatue}
+              urlsDecision={this.state.urlsDecision}
+              getNextLoop={(index != 0)? this.getAccompanyLoop : this.getMainLoop}
+              updateDecision={this.updateDecision}
+              updateLoadStatue={this.updateLoadStatue}
+            />
+          ))
+        }
+
+        {this.state.sequencer && <Sequencer urlsDecision={this.state.urlsDecision}/>}
+
       </div>
     )
   }

@@ -1,56 +1,16 @@
-import React, {Component} from 'react';
-import { Player, Players, Transport, Tone, Sequence } from "tone";
-import sample1 from './audio/sample1.wav'
+import React, { Component } from 'react';
+import {Players, Transport, Sequence } from "tone";
 import _ from 'lodash';
 
-const style_off = {
-    'border': '1px solid black',
-    'width' : '20px',
-    'height': '20px',
-    'margin': '1px'
-}
 
-const progress_on = {
-    'border': '1px solid black',
-    'width' : '20px',
-    'height': '5px',
-    'margin': '1px',
-    'backgroundColor': '#ED553B',
-}
-const progress_off = {
-    'border': '1px solid black',
-    'width' : '20px',
-    'height': '5px',
-    'margin': '1px'
-}
-
-const style_on = {
-    'border': '1px solid black',
-    'width': '20px',
-    'height': '20px',
-    'backgroundColor': '#FFF130',
-    'margin': '1px'
-}
-
-const flex = {
-    'display': 'flex',
-    'flexDirection': 'row',
-    'margin': 'auto',
-    'justifyContent': 'center',
-    'alignItems': 'center' 
-}
- 
-const activeColumn = {
-    'backgroundColor': '#20639B'
-}
-
-const defaultPads = [[1],[1],[1], [1],[1],[1],[1],[1]]
+const ROOT_URL = `http://140.109.21.190:5000/download_filepath`
+const defaultPads = [[1, 0, 0, 0],[1, 0, 0, 0],[1, 0, 0, 0],[1, 0, 0, 0],[1, 0, 0, 0],[1, 0, 0, 0],[1, 0, 0, 0],[1, 0, 0, 0]]
 
 class Sequencer extends Component {
 
     constructor(props) {
         super(props)
-        this.state = { pads: defaultPads, tracks: 1, CurrentColumn: 0 }
+        this.state = { pads: defaultPads, tracks: 4, CurrentColumn: 0 }
         this.addTrack = this.addTrack.bind(this)
         this.getRandomTemplate = this.getRandomTemplate.bind(this)
         this.startSequence = this.startSequence.bind(this)
@@ -58,10 +18,8 @@ class Sequencer extends Component {
 
     togglePad(group, pad) {
         this.setState(state => {
-            console.log(state)
             const clonedPads = state.pads.slice(0)
             const padState = clonedPads[group][pad]
-            console.log(group, pad)
             clonedPads[group][pad] = padState === 1 ? 0 : 1
             return {
                 pads: clonedPads
@@ -70,11 +28,12 @@ class Sequencer extends Component {
     }
 
     getRandomTemplate() {
-        console.log('randome template')
+        if (this.state.tracks < 2) return
         fetch(`http://140.109.21.190:5000/get_template/${this.state.tracks}`)
             .then(res => res.json())
             .then(res => this.setState({ pads: res['template'] }))
     }
+
 
     addTrack() {
         let pads = this.state.pads
@@ -91,26 +50,18 @@ class Sequencer extends Component {
         })
         tracks = tracks + 1
         this.setState({ pads: tempPads, tracks: tracks})
-
-        fetch(`http://140.109.21.190:5000/get_template/${tracks}`)
-            .then(res => res.json())
-            .then(res => this.setState({ pads: res['template'] }))
+        this.getRandomTemplate()
     }
 
 
     startSequence() {
-        console.log(this.state.players.get('track1'))
-        // this.state.players.get('track1').start()
         let sequence = new Sequence((time, columnIndex) => {
             this.setState({ CurrentColumn: columnIndex })
             const column = this.state.pads[columnIndex];
             const players = this.state.players
-            // console.log(players)
             column.forEach((on, row) => {
-                console.log(on, row)
                 if (on) {
-                    console.log(players)
-                    players.get(`track${row}`).start(time, 0, `${8 * 2}n`, 0, 1);
+                    players.get(row).start(time);
                 }
             });
 
@@ -120,78 +71,78 @@ class Sequencer extends Component {
         Transport.toggle()
     }
 
-    componentDidMount(){
+    componentDidMount() {
+        const { urlsDecision } = this.props
 
-        let players = new Players({
-            'track0': `http://140.109.21.190:5000/choose_loop/1`,
-            'track1': `http://140.109.21.190:5000/choose_loop/1`,
-            'track2': `http://140.109.21.190:5000/choose_loop/2`,
-            'track3': `http://140.109.21.190:5000/choose_loop/3`,
-        }, {
-            volume: -10,
-            fadeOut: `2n`
-        }).toMaster();
+        let tracks  = urlsDecision.length
+        this.getRandomTemplate()
 
-        this.setState({ players: players })
+        let urls = urlsDecision.map(item => `${ROOT_URL}?url=${item}`);  
 
-        Transport.bpm.value = 15 
+        let players = new Players(urls, () => {
+            console.log('loaded')
+            this.setState({ 'players': players })
+            this.setState({ 'tracks': tracks })
+            this.setState({ 'urls': urls })
+        }, { volume: -10 }).toMaster();
 
+        Transport.bpm.value = 20 
 
-        // fetch('http://140.109.21.190:5000/get_main_loop')
-        //     .then(res => res.json())
-        //     .then(res => {
-        //         let main_loop = res.main
-        //         console.log(res.main)
-        //         // `http://140.109.21.190:5000/download_filepath?url=${main_loop}`
-        //         var player = new Player(sample1, () => {
-                    
-        //             let data = players.buffer.getChannelData()
-        //             this.setState({ player: player })
-        //             console.log(data)
-        //         }).toMaster()
-
-        //     })
-
-
-        
-        // setInterval(() => {
-        //     let next = (this.state.CurrentColumn + 1 ) % 8
-        //     this.setState({ CurrentColumn: next})
-        // }, 1000);
     }
 
-    componentDidUpdate(){
+
+
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevProps == this.props) return 
+        const { urlsDecision } = this.props
+        let tracks = urlsDecision.length
+        let urls = urlsDecision.map(item => `${ROOT_URL}?url=${item}`);
+        let players = new Players(urls, () => {
+            console.log('loaded') 
+            this.setState({ 'players': players })
+            this.setState({ 'urls': urls })
+            this.setState({'tracks': tracks})
+        }, {volume: -10}).toMaster();
+
+        Transport.bpm.value = 13 
+
+    
+        
         Transport.on('stop', () => {
             this.setState({CurrentColumn: 0})
         });
     }
 
 
+
     render() {
         const { pads } = this.state
         return (
             <div className='sequencer'>
-                <div style={flex}>
+                <div className='pads'>
                     {pads.map((group, groupIndex) => (
-                        <div key={`pad-${groupIndex}`} className="pads">
+                        <div key={`pad-${groupIndex}`}>
                             <div key={`progress-${groupIndex}`}
-                                style={(groupIndex == this.state.CurrentColumn) ? progress_on : progress_off}>
+                                className={`progress ${(groupIndex == this.state.CurrentColumn) && ' progress_on'}`}
+                            >
                             </div>
                             {group.map((pad, i) => (
                                 <div
                                     key={`pad-group-${i}`}
-                                    style={(pad == 1) ? style_on : style_off}
-                                    onClick={() => { this.togglePad(groupIndex, i) 
+                                    className={`pad ${(pad == 1) && ' pad_on'}`}
+                                    onClick={() => {
+                                        this.togglePad(groupIndex, i)
                                     }}>
                                 </div>
                             ))}
-                        </div>
-                        ))
+                        </div>))
                     }
                 </div>
-                <button onClick={this.startSequence}>Play</button>
-                <button onClick={this.addTrack}>Add Track</button>
-                <button onClick={this.getRandomTemplate}>Get Template</button>
+
+                <button className='main-btn' onClick={this.startSequence}>Play</button>
+                {/* <button className='main-btn' onClick={this.addTrack}>Add Track</button> */}
+                <button className='main-btn' onClick={this.getRandomTemplate}>Get Template</button>
             </div>
         )
     }
