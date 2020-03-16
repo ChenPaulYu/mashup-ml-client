@@ -54,7 +54,7 @@ class Waveform extends Component {
         } else {
             this.state.chooseColumn(this.state.index)
             if(Transport.state == 'stopped') {
-                // Transport.start()
+                Transport.start()
             }
         }
     }
@@ -63,13 +63,13 @@ class Waveform extends Component {
         if (this.state.player) {
             this.state.player.loop = true
             if (Transport.state == 'stopped') {
-                this.state.player.start()
+                this.state.player.sync().start()
                 // this.state.player.sync().start()
             } else {
                 console.log(this.state.player.buffer.duration)
-                this.state.player.sync()
-                Transport.start()
-                // this.state.player.sync().restart(Transport.seconds % this.state.player.buffer.duration)
+                // this.state.player.sync()
+                // Transport.start()
+                this.state.player.sync().restart(Transport.seconds % this.state.player.buffer.duration)
 
             }
             this.state.player.mute = false
@@ -92,13 +92,14 @@ class Waveform extends Component {
                 let data = player.buffer.getChannelData()
                 this.drawWaveform(data, this.canvas.width, this.canvas.height, colors[0])
                 player.toMaster()
+                this.setState({ player, data })
             })
         }
     }
 
     componentDidUpdate(prevProps, prevState) {
 
-        
+
         if (prevProps == this.props) return
 
         const { index, url, value, colors, chooseColumn, group_index, currentLoadStatue, sequencer, lockStatue, mute } = this.props
@@ -126,10 +127,12 @@ class Waveform extends Component {
             })
         }
 
-        this.setState({ url, value, index, colors, chooseColumn, group_index, currentLoadStatue, mute })
+        this.setState({ url, value, index, colors, group_index, currentLoadStatue, mute })
 
+    
         if (this.state.player) {
-            if (value == 1) {
+            console.log(this.state.player)
+            if (value == 1 && mute != 1) {
                 this.drawWaveform(this.state.data, this.canvas.width, this.canvas.height, colors[1])
                 if (lockStatue[group_index] == 1) return
                 this.connectAudio()
@@ -140,7 +143,6 @@ class Waveform extends Component {
         }
 
         if (sequencer) {
-            Transport.stop()
             this.disconnectAudio()
         }
 
