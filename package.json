@@ -1,5 +1,6 @@
 {
   "name": "mashup-ml-client",
+  "homepage": "https://github.com/ChenPaulYu/mashup-ml-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,6 +10,7 @@
     "@testing-library/react": "9.4.1",
     "@testing-library/user-event": "7.2.1",
     "bootstrap": "4.4.1",
+    "gh-pages": "2.2.0",
     "grommet": "2.11.1",
     "polished": "3.4.4",
     "react": "^16.13.0",
@@ -24,7 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
