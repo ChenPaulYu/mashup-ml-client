@@ -77,18 +77,18 @@ class Loops extends Component {
 
     componentDidUpdate(prevProps, prevState) {
 
-        if (prevState != this.state) {
-            if (this.state.loaded == 4) {
-                this.setState({ 'loaded': 0 })
-                this.state.updateLoadStatue(this.state.index, 0)
-                console.log(this.state.index, ': loadfinish')
-            }
-        }
+        // if (prevState != this.state) {
+        //     if (this.state.loaded == 4) {
+        //         this.setState({ 'loaded': 0 })
+        //         this.state.updateLoadStatue(this.state.index, 0)
+        //         console.log(this.state.index, ': loadfinish')
+        //     }
+        // }
 
 
         if (prevProps != this.props) {
-            const { index, value, urls } = this.props
-            this.setState({ index, value, urls })
+            const { index, value, urls, lockStatue } = this.props
+            this.setState({ index, value, urls, lockStatue })
         }
 
 
@@ -108,10 +108,11 @@ class Loops extends Component {
                         url={this.state.urls == null ? null : this.state.urls[index]}
                         colors={colors}
                         chooseColumn={this.chooseColumn}
+                        currentlockStatue={this.state.value}
                     />
                 ))}
                 {/* {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>} */}
-                {/* <button className='main-btn' onClick={this.toggleLock}>{this.state.value ? 'unLock' : 'Lock'}</button> */}
+                <button className={this.state.value?'sub-btn':'main-btn'} onClick={this.toggleLock}>{this.state.value ? 'unLock' : 'Lock'}</button>
                 {(this.state.mute) ? <button className='sub-btn' onClick={this.toggleMute}>unMute</button> : <button className='main-btn' onClick={this.toggleMute}>Mute</button>}
             </div>
         )

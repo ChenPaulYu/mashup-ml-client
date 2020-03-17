@@ -63,7 +63,8 @@ class Waveform extends Component {
                 Transport.start()
             } else {
                 console.log(Transport.seconds % this.state.player.buffer.duration)
-                this.state.player.sync().restart(Transport.seconds % this.state.player.buffer.duration)
+                // this.state.player.sync().restart().seek(Transport.seconds % this.state.player.buffer.duration)
+                this.state.player.sync().restart().seek(Transport.seconds % this.state.player.buffer.duration)
                 console.log('restart')
             }
             this.state.player.mute = false
@@ -79,8 +80,8 @@ class Waveform extends Component {
     }
 
     componentDidMount() {
-        const { url, value, index, colors, chooseColumn } = this.props
-        this.setState({ url, value, index, colors, chooseColumn })
+        const { url, value, index, colors, chooseColumn, currentlockStatue } = this.props
+        this.setState({ url, value, index, colors, chooseColumn, currentlockStatue })
         if (url != null) {
             var player = new Player(url, () => {
                 let data = player.buffer.getChannelData()
@@ -96,7 +97,7 @@ class Waveform extends Component {
 
         if (prevProps == this.props) return
 
-        const { index, url, value, colors, mute } = this.props
+        const { index, url, value, colors, mute, currentlockStatue } = this.props
 
 
         if (url != null && !this.state.player) {
@@ -109,11 +110,11 @@ class Waveform extends Component {
             })
         }
 
-        this.setState({ url, value, index, colors })
+        this.setState({ url, value, index, colors, currentlockStatue })
 
         if (this.state.player) {
-            if (mute == prevProps.mute) {
-                // if (value == prevProps.value) return
+            if (mute == prevProps.mute) {   
+                if(value == prevProps.value) return
                 if (value == 1) {
                     this.drawWaveform(this.state.data, this.canvas.width, this.canvas.height, colors[1])
                     this.connectAudio()

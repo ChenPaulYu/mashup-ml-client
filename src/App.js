@@ -91,10 +91,10 @@ class App extends Component {
     if (state.lockStatue.reduce(reducer) == 4) {
       this.setState({ 'lockStatue': state.lockStatue, 'sequencer': true })
     } else {
-      if (value == 1) {
-        console.log('update lock ', index)
-        this.getAccompanyLoop(index, this.state.urlsDecision[index])
-      }
+      // if (value == 1) {
+      //   console.log('update lock ', index)
+      //   this.getAccompanyLoop(index, this.state.urlsDecision[index])
+      // }
       this.setState({ 'lockStatue': state.lockStatue })
     }
   }
@@ -118,10 +118,10 @@ class App extends Component {
               urls={urls}
               index={index}
               value={this.state.lockStatue[index]}
-              // lockStatue={this.state.lockStatue}
+              lockStatue={this.state.lockStatue}
               // urlsDecision={this.state.urlsDecision}
               // updateDecision={this.updateDecision}
-              // updateLockStatue={this.updateLockStatue}
+              updateLockStatue={this.updateLockStatue}
               // getNextLoop={(index != 0) ? this.getAccompanyLoop : this.getMainLoop}
             />
           ))
