@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/ChenPaulYu/mashup-ml-client/static/css/main.fe3ecda1.chunk.css",
+    "main.js": "/ChenPaulYu/mashup-ml-client/static/js/main.caed5eb5.chunk.js",
+    "main.js.map": "/ChenPaulYu/mashup-ml-client/static/js/main.caed5eb5.chunk.js.map",
+    "runtime-main.js": "/ChenPaulYu/mashup-ml-client/static/js/runtime-main.a1cf0f61.js",
+    "runtime-main.js.map": "/ChenPaulYu/mashup-ml-client/static/js/runtime-main.a1cf0f61.js.map",
+    "static/css/2.c0fd05c5.chunk.css": "/ChenPaulYu/mashup-ml-client/static/css/2.c0fd05c5.chunk.css",
+    "static/js/2.da5dacaa.chunk.js": "/ChenPaulYu/mashup-ml-client/static/js/2.da5dacaa.chunk.js",
+    "static/js/2.da5dacaa.chunk.js.map": "/ChenPaulYu/mashup-ml-client/static/js/2.da5dacaa.chunk.js.map",
+    "index.html": "/ChenPaulYu/mashup-ml-client/index.html",
+    "precache-manifest.088588117e74a012f4b34fe148ab1ac8.js": "/ChenPaulYu/mashup-ml-client/precache-manifest.088588117e74a012f4b34fe148ab1ac8.js",
+    "service-worker.js": "/ChenPaulYu/mashup-ml-client/service-worker.js",
+    "static/css/2.c0fd05c5.chunk.css.map": "/ChenPaulYu/mashup-ml-client/static/css/2.c0fd05c5.chunk.css.map",
+    "static/css/main.fe3ecda1.chunk.css.map": "/ChenPaulYu/mashup-ml-client/static/css/main.fe3ecda1.chunk.css.map",
+    "static/js/2.da5dacaa.chunk.js.LICENSE.txt": "/ChenPaulYu/mashup-ml-client/static/js/2.da5dacaa.chunk.js.LICENSE.txt",
+    "static/media/index.css": "/ChenPaulYu/mashup-ml-client/static/media/roboto-latin-900italic.ebf6d164.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a1cf0f61.js",
+    "static/css/2.c0fd05c5.chunk.css",
+    "static/js/2.da5dacaa.chunk.js",
+    "static/css/main.fe3ecda1.chunk.css",
+    "static/js/main.caed5eb5.chunk.js"
+  ]
+}
