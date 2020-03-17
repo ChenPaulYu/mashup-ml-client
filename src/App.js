@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Sequencer from './Sequencer';
 import Loops from './component/Loops'
+import { Helmet } from 'react-helmet'
+
+const title = 'ML Mashup'
 
 
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
@@ -135,6 +138,7 @@ class App extends Component {
   render() {
     return (
       <div className="App"> 
+        <Helmet> <title>{title}</title> </Helmet>
         <h1>Interactive Beat Makers</h1>
         { 
           this.state.groupUrls.map((urls, index) => (

@@ -55,16 +55,13 @@ class Waveform extends Component {
     }
 
     connectAudio() {
-        console.log('volume: ', this.state.player.volume.value)
         if (this.state.player) {
             this.state.player.loop = true
             if (Transport.state == 'stopped') {
                 this.state.player.sync().start()
                 Transport.start()
             } else {
-                console.log(Transport.seconds % this.state.player.buffer.duration)
                 this.state.player.sync().restart().seek(Transport.seconds % this.state.player.buffer.duration)
-                console.log('restart')
             }
             this.state.player.mute = false
         }
@@ -81,7 +78,6 @@ class Waveform extends Component {
     componentWillMount() {
         const { server_url } = this.props
         this.setState({ server_url })
-        console.log(server_url)
     }
 
     componentDidMount() {

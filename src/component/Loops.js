@@ -63,16 +63,13 @@ class Loops extends Component {
 
         let index = this.state.index
         let urls = this.state.urlsDecision
-        console.log('change loop: ', index)
         if (index == 0) {
             this.state.getNextLoop(4)
         }
         else {
-            console.log(index - 1, urls)
             this.state.getNextLoop(index - 1, urls[index - 1])
         }
 
-        console.log('change loop')
         this.chooseColumn(-1)
     }
 
@@ -103,7 +100,6 @@ class Loops extends Component {
     componentWillMount() {
         const { server_url} = this.props
         this.setState({ server_url })
-        console.log(server_url)
     }
 
     componentDidMount() {
@@ -117,7 +113,6 @@ class Loops extends Component {
             if (this.state.loaded == 4) {
                 this.setState({ 'loaded': 0 })
                 this.state.updateLoadStatue(this.state.index, 0)
-                console.log(this.state.index, ': loadfinish')
             }
         }
 

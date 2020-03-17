@@ -30,6 +30,7 @@ class Sequencer extends Component {
 
     getRandomTemplate() {
         if (this.state.tracks < 2) return
+        console.log(`${this.state.server_url}/get_template/${this.state.tracks}`)
         fetch(`${this.state.server_url}/get_template/${this.state.tracks}`)
             .then(res => res.json())
             .then(res => this.setState({ pads: res['template'] }))
@@ -78,10 +79,15 @@ class Sequencer extends Component {
         this.setState({ 'play': false })
     }
 
-    componentDidMount() {
-        const { urlsDecision, volumes, server_url } = this.props
-
+    componentWillMount() {
+        const { server_url } = this.props
         this.setState({ server_url })
+    }
+
+    componentDidMount() {
+        const { urlsDecision, volumes } = this.props
+
+        
         let tracks  = urlsDecision.length
         this.getRandomTemplate()
 
