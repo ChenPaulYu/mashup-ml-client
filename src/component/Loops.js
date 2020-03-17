@@ -37,7 +37,7 @@ class Loops extends Component {
         if (index != -1) {
             tempState[index] = 1
         }
-        // this.state.updateDecision(this.state.index, this.state.urls[index])
+        this.state.updateDecision(this.state.index, this.state.urls[index])
         this.setState({ 'playColumns': tempState })
     }
 
@@ -70,7 +70,7 @@ class Loops extends Component {
     }
 
     componentDidMount() {
-        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision } = this.props
+        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision  } = this.props
         console.log('mount-', this.props)
         this.setState({ index, value, urls, updateLockStatue, getNextLoop, updateDecision })
     }
