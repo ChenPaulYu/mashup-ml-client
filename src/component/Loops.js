@@ -63,16 +63,27 @@ class Loops extends Component {
         }
         let lock_statue_update = !this.state.value ? 1 : 0
         this.state.updateLockStatue(this.state.index, lock_statue_update)
+        
     }
 
     toggleMute() {
+        if (this.state.playColumns.reduce(reducer) == 0) {
+            alert('choose one loop')
+            return
+        }
+         if (this.state.sequencer) {
+            if (this.state.lockStatue[this.state.index]) {
+                this.toggleLock()
+            }
+            this.state.toggleSequencer()
+        }       
         this.setState({ 'mute': !this.state.mute })
     }
 
     componentDidMount() {
-        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision  } = this.props
+        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer  } = this.props
         console.log('mount-', this.props)
-        this.setState({ index, value, urls, updateLockStatue, getNextLoop, updateDecision })
+        this.setState({ index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer })
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -87,10 +98,14 @@ class Loops extends Component {
 
 
         if (prevProps != this.props) {
-            const { index, value, urls, lockStatue } = this.props
-            this.setState({ index, value, urls, lockStatue })
+            const { index, value, urls, lockStatue, sequencer } = this.props
+            if(sequencer != prevProps.sequencer) {
+                if(sequencer == 1) {
+                    this.state.mute = true
+                } 
+            }   
+            this.setState({ index, value, urls, lockStatue, sequencer })
         }
-
 
     }
 
@@ -108,7 +123,6 @@ class Loops extends Component {
                         url={this.state.urls == null ? null : this.state.urls[index]}
                         colors={colors}
                         chooseColumn={this.chooseColumn}
-                        currentlockStatue={this.state.value}
                     />
                 ))}
                 {/* {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>} */}

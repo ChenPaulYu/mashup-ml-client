@@ -23,6 +23,7 @@ class App extends Component {
     this.updateDecision   = this.updateDecision.bind(this)
     this.getAccompanyLoop = this.getAccompanyLoop.bind(this)
     this.updateLoadStatue = this.updateLoadStatue.bind(this)
+    this.toggleSequencer    = this.toggleSequencer.bind(this)
   }
 
 
@@ -89,7 +90,8 @@ class App extends Component {
     let state = this.state
     state.lockStatue[index] = value
     if (state.lockStatue.reduce(reducer) == 4) {
-      this.setState({ 'lockStatue': state.lockStatue, 'sequencer': true })
+      this.setState({ 'lockStatue': state.lockStatue })
+      if (!this.state.sequencer) this.toggleSequencer()
     } else {
       if (value == 1) {
         console.log('update lock ', index)
@@ -97,6 +99,10 @@ class App extends Component {
       }
       this.setState({ 'lockStatue': state.lockStatue })
     }
+  }
+
+  toggleSequencer() {
+    this.setState({'sequencer': !this.state.sequencer})
   }
 
  
@@ -117,11 +123,13 @@ class App extends Component {
               key={index}
               urls={urls}
               index={index}
+              sequencer={this.state.sequencer}
               value={this.state.lockStatue[index]}
               lockStatue={this.state.lockStatue}
               urlsDecision={this.state.urlsDecision}
               updateDecision={this.updateDecision}
               updateLockStatue={this.updateLockStatue}
+              toggleSequencer={this.toggleSequencer}
               getNextLoop={(index != 0) ? this.getAccompanyLoop : this.getMainLoop}
             />
           ))

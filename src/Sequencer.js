@@ -64,7 +64,7 @@ class Sequencer extends Component {
                     players.get(row).start(time);
                 }
             });
-
+            console.log('sequence: ', time)
         }, _.range(8), `${8}n`).start()
 
         this.setState({ sequence: sequence })
@@ -80,38 +80,22 @@ class Sequencer extends Component {
         let urls = urlsDecision.map(item => `${ROOT_URL}?url=${item}`);  
 
         let players = new Players(urls, () => {
-            console.log('loaded')
             this.setState({ 'players': players })
             this.setState({ 'tracks': tracks })
             this.setState({ 'urls': urls })
         }, { volume: -10 }).toMaster();
 
-        Transport.bpm.value = 20 
+        Transport.bpm.value = 15 
 
     }
 
 
-
-
-    componentDidUpdate(prevProps, prevState){
-        if (prevProps == this.props) return 
-        const { urlsDecision } = this.props
-        let tracks = urlsDecision.length
-        let urls = urlsDecision.map(item => `${ROOT_URL}?url=${item}`);
-        let players = new Players(urls, () => {
-            console.log('loaded') 
-            this.setState({ 'players': players })
-            this.setState({ 'urls': urls })
-            this.setState({'tracks': tracks})
-        }, {volume: -10}).toMaster();
-
-        Transport.bpm.value = 13 
-
-    
-        
-        Transport.on('stop', () => {
-            this.setState({CurrentColumn: 0})
-        });
+    componentWillUnmount() {
+        if(this.state.sequence) {
+            this.state.sequence.mute = true
+            this.state.sequence.stop().removeAll()
+        }
+        console.log('will unmount')
     }
 
 
