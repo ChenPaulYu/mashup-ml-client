@@ -118,14 +118,11 @@ class App extends Component {
               urls={urls}
               index={index}
               value={this.state.lockStatue[index]}
-              sequencer={this.state.sequencer}
-              currentLoadStatue={this.state.loadStatue[index]}
-              lockStatue={this.state.lockStatue}
-              updateLockStatue={this.updateLockStatue}
-              urlsDecision={this.state.urlsDecision}
-              getNextLoop={(index != 0)? this.getAccompanyLoop : this.getMainLoop}
-              updateDecision={this.updateDecision}
-              updateLoadStatue={this.updateLoadStatue}
+              // lockStatue={this.state.lockStatue}
+              // urlsDecision={this.state.urlsDecision}
+              // updateDecision={this.updateDecision}
+              // updateLockStatue={this.updateLockStatue}
+              // getNextLoop={(index != 0) ? this.getAccompanyLoop : this.getMainLoop}
             />
           ))
         }

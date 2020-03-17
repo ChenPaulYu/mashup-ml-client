@@ -49,13 +49,9 @@ class Waveform extends Component {
 
     canvasClick() {
         if (this.state.value == 1) {
-            this.disconnectAudio()
             this.state.chooseColumn(-1)
         } else {
             this.state.chooseColumn(this.state.index)
-            if(Transport.state == 'stopped') {
-                Transport.start()
-            }
         }
     }
 
@@ -64,13 +60,11 @@ class Waveform extends Component {
             this.state.player.loop = true
             if (Transport.state == 'stopped') {
                 this.state.player.sync().start()
-                // this.state.player.sync().start()
+                Transport.start()
             } else {
-                console.log(this.state.player.buffer.duration)
-                // this.state.player.sync()
-                // Transport.start()
+                console.log(Transport.seconds % this.state.player.buffer.duration)
                 this.state.player.sync().restart(Transport.seconds % this.state.player.buffer.duration)
-
+                console.log('restart')
             }
             this.state.player.mute = false
         }
@@ -85,8 +79,8 @@ class Waveform extends Component {
     }
 
     componentDidMount() {
-        const { url, value, index, colors, chooseColumn, group_index, loadStatue, loadCompleted, currentLoadStatue } = this.props
-        this.setState({ url, value, index, colors, chooseColumn, group_index, loadStatue, loadCompleted, currentLoadStatue })
+        const { url, value, index, colors, chooseColumn } = this.props
+        this.setState({ url, value, index, colors, chooseColumn })
         if (url != null) {
             var player = new Player(url, () => {
                 let data = player.buffer.getChannelData()
@@ -102,50 +96,40 @@ class Waveform extends Component {
 
         if (prevProps == this.props) return
 
-        const { index, url, value, colors, chooseColumn, group_index, currentLoadStatue, sequencer, lockStatue, mute } = this.props
-
-        if (this.state.player) {
-            if (mute == 1) {
-                console.log('mute')
-                this.state.player.mute = true
-            } else {
-                this.state.player.mute = false
-            }
-
-        }
+        const { index, url, value, colors, mute } = this.props
 
 
-
-        if (url != null && (!this.state.player || currentLoadStatue) && lockStatue[group_index] != 1) {
-            if (prevState.url == url && currentLoadStatue != 1) return
+        if (url != null && !this.state.player) {
+            if (prevState.url == url) return
             var player = new Player(`${ROOT_URL}?url=${url}`, () => {
                 let data = player.buffer.getChannelData()
                 this.drawWaveform(data, this.canvas.width, this.canvas.height, colors[0])
                 player.toMaster()
-                this.state.loadCompleted()
                 this.setState({ player, data })
             })
         }
 
-        this.setState({ url, value, index, colors, group_index, currentLoadStatue, mute })
+        this.setState({ url, value, index, colors })
 
-    
         if (this.state.player) {
-            console.log(this.state.player)
-            if (value == 1 && mute != 1) {
-                this.drawWaveform(this.state.data, this.canvas.width, this.canvas.height, colors[1])
-                if (lockStatue[group_index] == 1) return
-                this.connectAudio()
-            } else if (value == 0) {
-                this.disconnectAudio()
-                this.drawWaveform(this.state.data, this.canvas.width, this.canvas.height, colors[0])
+            if (mute == prevProps.mute) {
+                // if (value == prevProps.value) return
+                if (value == 1) {
+                    this.drawWaveform(this.state.data, this.canvas.width, this.canvas.height, colors[1])
+                    this.connectAudio()
+                } else if (value == 0) {
+                    this.disconnectAudio()
+                    this.drawWaveform(this.state.data, this.canvas.width, this.canvas.height, colors[0])
+                }   
+            } else {
+                if (mute == 1) {
+                    this.state.player.mute = true
+                } else {
+                    this.state.player.mute = false
+                }  
             }
+         
         }
-
-        if (sequencer) {
-            this.disconnectAudio()
-        }
-
     }
 
 

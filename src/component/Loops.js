@@ -37,7 +37,7 @@ class Loops extends Component {
         if (index != -1) {
             tempState[index] = 1
         }
-        this.state.updateDecision(this.state.index, this.state.urls[index])
+        // this.state.updateDecision(this.state.index, this.state.urls[index])
         this.setState({ 'playColumns': tempState })
     }
 
@@ -70,8 +70,9 @@ class Loops extends Component {
     }
 
     componentDidMount() {
-        const { index, value, lockStatue, urls, updateLockStatue, getNextLoop, updateDecision, updateLoadStatue, urlsDecision } = this.props
-        this.setState({ index, value, lockStatue, urls, updateLockStatue, getNextLoop, updateDecision, updateLoadStatue, urlsDecision })
+        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision } = this.props
+        console.log('mount-', this.props)
+        this.setState({ index, value, urls, updateLockStatue, getNextLoop, updateDecision })
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -86,10 +87,8 @@ class Loops extends Component {
 
 
         if (prevProps != this.props) {
-            // console.log('Loops Update: ', this.props.urls[0])
-            const { index, value, lockStatue, urls, currentLoadStatue, urlsDecision } = this.props
-            // console.log('current load statue: ', currentLoadStatue)
-            this.setState({ index, value, lockStatue, urls, currentLoadStatue, urlsDecision })
+            const { index, value, urls } = this.props
+            this.setState({ index, value, urls })
         }
 
 
@@ -104,19 +103,15 @@ class Loops extends Component {
                         key={index}
                         index={index}
                         value={value}
-                        mute={this.state.mute}
                         group_index={this.state.index}
+                        mute={this.state.mute}
                         url={this.state.urls == null ? null : this.state.urls[index]}
                         colors={colors}
-                        sequencer={this.props.sequencer}
-                        currentLoadStatue={this.state.currentLoadStatue}
                         chooseColumn={this.chooseColumn}
-                        loadCompleted={this.loadCompleted}
-                        lockStatue={this.state.lockStatue}
                     />
                 ))}
-                {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>}
-                <button className='main-btn' onClick={this.toggleLock}>{this.state.value ? 'unLock' : 'Lock'}</button>
+                {/* {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>} */}
+                {/* <button className='main-btn' onClick={this.toggleLock}>{this.state.value ? 'unLock' : 'Lock'}</button> */}
                 {(this.state.mute) ? <button className='sub-btn' onClick={this.toggleMute}>unMute</button> : <button className='main-btn' onClick={this.toggleMute}>Mute</button>}
             </div>
         )
