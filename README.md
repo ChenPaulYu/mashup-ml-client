@@ -1,1 +1,2 @@
-## Interactive Beat Maker System (Loop Mashup by AI and You)
+## Interactive Beat Maker System 
+Let's make beats with AI
