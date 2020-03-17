@@ -56,6 +56,7 @@ class Waveform extends Component {
     }
 
     connectAudio() {
+        console.log('volume: ', this.state.player.volume.value)
         if (this.state.player) {
             this.state.player.loop = true
             if (Transport.state == 'stopped') {
@@ -63,7 +64,6 @@ class Waveform extends Component {
                 Transport.start()
             } else {
                 console.log(Transport.seconds % this.state.player.buffer.duration)
-                // this.state.player.sync().restart().seek(Transport.seconds % this.state.player.buffer.duration)
                 this.state.player.sync().restart().seek(Transport.seconds % this.state.player.buffer.duration)
                 console.log('restart')
             }
@@ -97,7 +97,12 @@ class Waveform extends Component {
 
         if (prevProps == this.props) return
 
-        const { index, url, value, colors, mute, currentLoadStatue } = this.props
+        const { index, url, value, colors, mute, currentLoadStatue, volume } = this.props
+
+        if (volume != prevProps.volume && this.state.player) {
+            this.state.player.volume.value = volume
+            console.log(volume)
+        }
 
         if (url != null && (!this.state.player || currentLoadStatue == 1)) {
             if (prevState.url == url) return
@@ -105,6 +110,7 @@ class Waveform extends Component {
                 let data = player.buffer.getChannelData()
                 this.drawWaveform(data, this.canvas.width, this.canvas.height, colors[0])
                 player.toMaster()
+                player.volume.value = -15
                 this.state.loadCompleted()
                 this.setState({ player, data })
             })

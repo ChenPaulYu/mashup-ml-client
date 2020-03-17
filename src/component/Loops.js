@@ -5,6 +5,11 @@ import Waveform from './Waveform'
 const colors = ['#F4F1EE', '#FFF130']
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
+const volumeTransfer = (value, max=0, min=-30) => {
+    const ratio = value / 100;
+    const volume = min + (max - min) * ratio
+    return volume
+}
 
 class Loops extends Component {
     constructor(props) {
@@ -15,14 +20,21 @@ class Loops extends Component {
             'value': false,
             'players': null,
             'loaded': 0,
+            'volume': volumeTransfer(-15),
             'playColumns': [0, 0, 0, 0]
         })
 
-        this.toggleLock = this.toggleLock.bind(this)
-        this.changeLoop = this.changeLoop.bind(this)
-        this.toggleMute = this.toggleMute.bind(this)
-        this.chooseColumn = this.chooseColumn.bind(this)
+        this.toggleLock    = this.toggleLock.bind(this)
+        this.changeLoop    = this.changeLoop.bind(this)
+        this.toggleMute    = this.toggleMute.bind(this)
+        this.volumeAdjust = this.volumeAdjust.bind(this) 
+        this.chooseColumn  = this.chooseColumn.bind(this)
         this.loadCompleted = this.loadCompleted.bind(this)
+
+    }
+
+    volumeAdjust(event) {
+        this.setState({ 'volume': volumeTransfer(event.target.value)})
     }
 
     loadCompleted() {
@@ -128,6 +140,7 @@ class Loops extends Component {
                         group_index={this.state.index}
                         url={this.state.urls == null ? null : this.state.urls[index]}
                         colors={colors}
+                        volume={this.state.volume}
                         chooseColumn={this.chooseColumn}
                         loadCompleted={this.loadCompleted}
                         currentLoadStatue={this.state.currentLoadStatue}    
@@ -136,6 +149,7 @@ class Loops extends Component {
                 {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>}
                 <button className={this.state.value?'sub-btn':'main-btn'} onClick={this.toggleLock}>{this.state.value ? 'unLock' : 'Lock'}</button>
                 {(this.state.mute) ? <button className='sub-btn' onClick={this.toggleMute}>unMute</button> : <button className='main-btn' onClick={this.toggleMute}>Mute</button>}
+                <input type="range" min='0' max='100' className="volume" onInput={this.volumeAdjust}/>
             </div>
         )
     }

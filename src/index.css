@@ -80,3 +80,7 @@
 .pad_on {
   background-color: #FFF130;
 }
+
+.volume {
+  width: 60px;
+}
