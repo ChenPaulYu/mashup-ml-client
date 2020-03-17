@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "93cd22bbed0acab7d5d0ced61ea90d14",
+    "revision": "60578ecb7b29f0b88fb5cef25d2ca671",
     "url": "/mashup-ml-client/index.html"
   },
   {
-    "revision": "286a3d3878c9a54e280a",
+    "revision": "0243aeb7f2d83d938384",
     "url": "/mashup-ml-client/static/css/2.d5d3f7bc.chunk.css"
   },
   {
-    "revision": "77bfdf9fc86c514f09b8",
+    "revision": "528e0a44e7316e902fff",
     "url": "/mashup-ml-client/static/css/main.fe3ecda1.chunk.css"
   },
   {
-    "revision": "286a3d3878c9a54e280a",
-    "url": "/mashup-ml-client/static/js/2.da5dacaa.chunk.js"
+    "revision": "0243aeb7f2d83d938384",
+    "url": "/mashup-ml-client/static/js/2.b5d580e5.chunk.js"
   },
   {
     "revision": "8af0d53111a6e3782ff8ce95a2220491",
-    "url": "/mashup-ml-client/static/js/2.da5dacaa.chunk.js.LICENSE.txt"
+    "url": "/mashup-ml-client/static/js/2.b5d580e5.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "77bfdf9fc86c514f09b8",
-    "url": "/mashup-ml-client/static/js/main.caed5eb5.chunk.js"
+    "revision": "528e0a44e7316e902fff",
+    "url": "/mashup-ml-client/static/js/main.4173c2d0.chunk.js"
   },
   {
     "revision": "18ac4abce50014c04b6d",
