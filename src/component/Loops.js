@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Waveform from './Waveform'
 
-
 const colors = ['#F4F1EE', '#FFF130']
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -132,27 +131,31 @@ class Loops extends Component {
 
     render() {
         return (
-            <div className='loops'>
-                {this.state.playColumns.map((value, index) => (
-                    <Waveform
-                        key={index}
-                        index={index}
-                        value={value}
-                        mute={this.state.mute}
-                        group_index={this.state.index}
-                        url={this.state.urls == null ? null : this.state.urls[index]}
-                        colors={colors}
-                        volume={this.state.volume}
-                        chooseColumn={this.chooseColumn}
-                        loadCompleted={this.loadCompleted}
-                        currentLoadStatue={this.state.currentLoadStatue}    
-                        server_url={this.state.server_url}
-                    />
-                ))}
-                {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>}
-                <button className={this.state.value?'sub-btn':'main-btn'} onClick={this.toggleLock}>{this.state.value ? 'unLock' : 'Lock'}</button>
-                {(this.state.mute) ? <button className='sub-btn' onClick={this.toggleMute}>unMute</button> : <button className='main-btn' onClick={this.toggleMute}>Mute</button>}
-                <input type="range" min='0' max='100' className="volume" onInput={this.volumeAdjust}/>
+            <div>
+                <div className='loops'>
+                    {this.state.playColumns.map((value, index) => (
+                        <Waveform
+                            key={index}
+                            index={index}
+                            value={value}
+                            mute={this.state.mute}
+                            group_index={this.state.index}
+                            url={this.state.urls == null ? null : this.state.urls[index]}
+                            colors={colors}
+                            volume={this.state.volume}
+                            chooseColumn={this.chooseColumn}
+                            loadCompleted={this.loadCompleted}
+                            currentLoadStatue={this.state.currentLoadStatue}    
+                            server_url={this.state.server_url}
+                        />
+                    ))}
+                </div>
+                <div className='btn-group'>
+                    {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>}
+                    <button className={this.state.value ? 'sub-btn' : 'main-btn'} onClick={this.toggleLock}>{this.state.value ? 'unLock' : 'Lock'}</button>
+                    {(this.state.mute) ? <button className='sub-btn' onClick={this.toggleMute}>unMute</button> : <button className='main-btn' onClick={this.toggleMute}>Mute</button>}
+                    <input type="range" min='0' max='100' className="volume" onInput={this.volumeAdjust} />
+                </div>
             </div>
         )
     }

@@ -122,6 +122,7 @@ class Sequencer extends Component {
         const { pads } = this.state
         return (
             <div className='sequencer'>
+                <h4 className='text'>Arrange Sequencer to Complete Beat</h4>
                 <div className='pads'>
                     {pads.map((group, groupIndex) => (
                         <div key={`pad-${groupIndex}`}>

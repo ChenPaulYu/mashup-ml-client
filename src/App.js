@@ -114,7 +114,7 @@ class App extends Component {
       this.setState({ 'lockStatue': state.lockStatue })
       if (!this.state.sequencer) this.toggleSequencer()
     } else {
-      if (value == 1) {
+      if (value == 1 && index < 3) {
         console.log('update lock ', index)
         this.getAccompanyLoop(index, this.state.urlsDecision[index])
       }
@@ -139,7 +139,10 @@ class App extends Component {
     return (
       <div className="App"> 
         <Helmet> <title>{title}</title> </Helmet>
-        <h1>Interactive Beat Makers</h1>
+        <div className='intro'>
+          <h1 className='text'>Interactive Beat Makers</h1>
+          <h4 className='text'>Choose Four Loop to Make Beats</h4>
+        </div>
         { 
           this.state.groupUrls.map((urls, index) => (
             <Loops

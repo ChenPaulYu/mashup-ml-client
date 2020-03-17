@@ -8,14 +8,15 @@
    margin : auto;
    justify-content: center;
    align-items: center;
+   width: 50%;
 }
 
 
 .draw {
   display: flex;
-  width : 100px;
-  height: 100px;
-  margin: 20px;
+  width : 80px;
+  height: 80px;
+  margin: 10px;
   border-radius: 10px;
 }
 
@@ -27,6 +28,7 @@
     margin: 5px;
     width : 60px;
     height: 30px;
+    font-family: 'Baloo Bhai 2'
 }
 
 .main-btn {
@@ -37,12 +39,14 @@
   margin: 5px;
   /* width : 60px; */
   height: 30px;
+  font-family: 'Baloo Bhai 2'
 }
 
 /* Sequencer.css */
 
 .sequencer {
-
+  margin: 50px;
+  /* border: 1px solid black; */
 }
 
 .pads {
@@ -53,14 +57,13 @@
   flex-direction: row;
   justify-content: center;
   border-radius: 5px;
-  /* background-color: cadetblue; */
 }
 
 .pad {
   border: 1px solid black;
-  border-radius: 5px;
-  width : 40px;
-  height: 20px;
+  border-radius: 3px;
+  width : 50px;
+  height: 30px;
   margin: 5px;
 }
 
@@ -71,9 +74,9 @@
 
 .progress {
   border: 1px solid black;
-  border-radius: 5px;
-  width : 40px;
-  height: 5px;
+  border-radius: 3px;
+  width : 50px;
+  height: 10px;
   margin: 5px;
 }
 
@@ -83,4 +86,22 @@
 
 .volume {
   width: 60px;
+  margin-top: 3px;
+  border: 1px sold black;
 }
+
+
+
+.text {
+  text-align: center;
+  font-family: 'Baloo Bhai 2';
+  margin : auto;
+  justify-content: center;
+  align-items: center; 
+}
+
+
+/* .btn-group {
+  border: 1px solid black;
+} */
+

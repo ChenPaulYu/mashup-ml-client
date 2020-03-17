@@ -21,7 +21,8 @@
     "reactstrap": "8.4.1",
     "styled-components": "5.0.1",
     "tone": "13.8.25",
-    "typeface-roboto": "0.0.75"
+    "typeface-roboto": "0.0.75",
+    "webfontloader": "1.6.28"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -78,7 +78,7 @@ class Waveform extends Component {
     componentWillMount() {
         const { server_url } = this.props
         this.setState({ server_url })
-    }
+        }
 
     componentDidMount() {
         const { url, value, index, colors, chooseColumn, loadCompleted } = this.props
