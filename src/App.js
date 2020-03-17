@@ -4,7 +4,7 @@ import Loops from './component/Loops'
 
 
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
-
+const server_url = 'https://musicai.citi.sinica.edu.tw/mashup_ml_server'
 
 class App extends Component {
   constructor(props) {
@@ -12,10 +12,12 @@ class App extends Component {
     this.state = ({
       'loadStatue'   : [0, 0, 0, 0], // 0 -> finish, 1 -> loading
       'lockStatue'   : [0, 0, 0, 0],
+      'volumes'      : [-15, -15, -15, -15],
       'groupUrls'    : [],
       'urlsDecision' : [],
-      'sequencer'    : false
-
+      'sequencer'    : false,
+      'server_url'    : server_url
+ 
     })
 
     this.getMainLoop      = this.getMainLoop.bind(this);
@@ -23,12 +25,21 @@ class App extends Component {
     this.updateDecision   = this.updateDecision.bind(this)
     this.getAccompanyLoop = this.getAccompanyLoop.bind(this)
     this.updateLoadStatue = this.updateLoadStatue.bind(this)
-    this.toggleSequencer    = this.toggleSequencer.bind(this)
+    this.toggleSequencer  = this.toggleSequencer.bind(this)
+    this.updateVolmes     = this.updateVolmes.bind(this)
+  }
+
+  updateVolmes(index, value) {
+    console.log(index, value)
+    let volumes = this.state.volumes
+    volumes[index] = value
+    this.setState({ 'volumes': volumes} )
   }
 
 
   getMainLoop(number) {
-    let url = `http://140.109.21.190:5000/get_main_loop/${number}`
+    let url = `${this.state.server_url}/get_main_loop/${number}`
+    console.log(url)
     this.updateLoadStatue(0, 1)
     fetch(url, { method: 'GET' }).then((response) => {
       if (!response.ok) {
@@ -50,7 +61,8 @@ class App extends Component {
   }
 
   getAccompanyLoop(index, url) {
-    let mashup_url = `http://140.109.21.190:5000/get_mashup_result?url=${url}&num=${100}`
+    let mashup_url = `${this.state.server_url}/get_mashup_result?url=${url}&num=${100}`
+
     if (this.state.groupUrls.length == index+1) {
       this.state.groupUrls.push([])
       this.setState({ 'groupUrls': this.state.groupUrls })      
@@ -116,6 +128,7 @@ class App extends Component {
 
 
   componentDidMount(){
+    console.log(this.state)
     this.getMainLoop(4)
   }
 
@@ -139,11 +152,13 @@ class App extends Component {
               updateDecision={this.updateDecision}
               toggleSequencer={this.toggleSequencer}
               updateLoadStatue={this.updateLoadStatue}
+              updateVolmes={this.updateVolmes}
+              server_url={this.state.server_url}
             />
           ))
         }
 
-        {this.state.sequencer && <Sequencer urlsDecision={this.state.urlsDecision}/>}
+        {this.state.sequencer && <Sequencer server_url={this.state.server_url} volumes={this.state.volumes} urlsDecision={this.state.urlsDecision}/>}
 
       </div>
     )

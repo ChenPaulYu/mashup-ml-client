@@ -10,10 +10,11 @@ class Sequencer extends Component {
 
     constructor(props) {
         super(props)
-        this.state = { pads: defaultPads, tracks: 4, CurrentColumn: 0 }
+        this.state = { 'pads': defaultPads, 'tracks': 4, 'CurrentColumn': 0, 'play': false }
         this.addTrack = this.addTrack.bind(this)
         this.getRandomTemplate = this.getRandomTemplate.bind(this)
         this.startSequence = this.startSequence.bind(this)
+        this.stopSequence  = this.stopSequence.bind(this)
     }
 
     togglePad(group, pad) {
@@ -29,7 +30,7 @@ class Sequencer extends Component {
 
     getRandomTemplate() {
         if (this.state.tracks < 2) return
-        fetch(`http://140.109.21.190:5000/get_template/${this.state.tracks}`)
+        fetch(`${this.state.server_url}/get_template/${this.state.tracks}`)
             .then(res => res.json())
             .then(res => this.setState({ pads: res['template'] }))
     }
@@ -68,24 +69,35 @@ class Sequencer extends Component {
         }, _.range(8), `${8}n`).start()
 
         this.setState({ sequence: sequence })
-        Transport.toggle()
+        Transport.start()
+        this.setState({'play': true})
+    }
+
+    stopSequence() {
+        Transport.stop()
+        this.setState({ 'play': false })
     }
 
     componentDidMount() {
-        const { urlsDecision } = this.props
+        const { urlsDecision, volumes, server_url } = this.props
 
+        this.setState({ server_url })
         let tracks  = urlsDecision.length
         this.getRandomTemplate()
 
-        let urls = urlsDecision.map(item => `${ROOT_URL}?url=${item}`);  
+        let urls = urlsDecision.map(item => `${this.state.server_url}/download_filepath?url=${item}`);  
 
         let players = new Players(urls, () => {
             this.setState({ 'players': players })
             this.setState({ 'tracks': tracks })
             this.setState({ 'urls': urls })
-        }, { volume: -10 }).toMaster();
+        }, { volume: volumes }).toMaster();
 
-        Transport.bpm.value = 15 
+        for (let i = 0; i < urls.length; i++) {
+            players.get(i).volume.value = volumes[i]
+        }
+
+        Transport.bpm.value = 20 
 
     }
 
@@ -123,8 +135,11 @@ class Sequencer extends Component {
                         </div>))
                     }
                 </div>
-
-                <button className='main-btn' onClick={this.startSequence}>Play</button>
+                
+                {!this.state.play
+                    ? <button className='main-btn' onClick={this.startSequence}>Start</button> 
+                    : <button className='sub-btn' onClick={this.stopSequence}>Stop</button>
+                }
                 {/* <button className='main-btn' onClick={this.addTrack}>Add Track</button> */}
                 <button className='main-btn' onClick={this.getRandomTemplate}>Get Template</button>
             </div>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Player, Transport, Tone } from "tone";
+import { Player, Transport } from "tone";
 
-const ROOT_URL = `http://140.109.21.190:5000/download_filepath`
 
 function getRects(data, w, h) {
     const step = Math.ceil(data.length / w)
@@ -79,6 +78,12 @@ class Waveform extends Component {
         }
     }
 
+    componentWillMount() {
+        const { server_url } = this.props
+        this.setState({ server_url })
+        console.log(server_url)
+    }
+
     componentDidMount() {
         const { url, value, index, colors, chooseColumn, loadCompleted } = this.props
         this.setState({ url, value, index, colors, chooseColumn, loadCompleted })
@@ -101,12 +106,12 @@ class Waveform extends Component {
 
         if (volume != prevProps.volume && this.state.player) {
             this.state.player.volume.value = volume
-            console.log(volume)
         }
 
         if (url != null && (!this.state.player || currentLoadStatue == 1)) {
             if (prevState.url == url) return
-            var player = new Player(`${ROOT_URL}?url=${url}`, () => {
+
+            var player = new Player(`${this.state.server_url}/download_filepath?url=${url}`, () => {
                 let data = player.buffer.getChannelData()
                 this.drawWaveform(data, this.canvas.width, this.canvas.height, colors[0])
                 player.toMaster()

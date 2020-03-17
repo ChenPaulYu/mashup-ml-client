@@ -5,7 +5,7 @@ import Waveform from './Waveform'
 const colors = ['#F4F1EE', '#FFF130']
 const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
-const volumeTransfer = (value, max=0, min=-30) => {
+const volumeTransfer = (value, max=-1, min=-40) => {
     const ratio = value / 100;
     const volume = min + (max - min) * ratio
     return volume
@@ -34,7 +34,9 @@ class Loops extends Component {
     }
 
     volumeAdjust(event) {
-        this.setState({ 'volume': volumeTransfer(event.target.value)})
+        let volume = volumeTransfer(event.target.value)
+        this.state.updateVolmes(this.state.index, volume)
+        this.setState({ 'volume': volume})
     }
 
     loadCompleted() {
@@ -98,10 +100,15 @@ class Loops extends Component {
         this.setState({ 'mute': !this.state.mute })
     }
 
+    componentWillMount() {
+        const { server_url} = this.props
+        this.setState({ server_url })
+        console.log(server_url)
+    }
+
     componentDidMount() {
-        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer, updateLoadStatue  } = this.props
-        console.log('mount-', this.props)
-        this.setState({ index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer, updateLoadStatue })
+        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer, updateLoadStatue, updateVolmes  } = this.props
+            this.setState({ index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer, updateLoadStatue, updateVolmes })
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -144,6 +151,7 @@ class Loops extends Component {
                         chooseColumn={this.chooseColumn}
                         loadCompleted={this.loadCompleted}
                         currentLoadStatue={this.state.currentLoadStatue}    
+                        server_url={this.state.server_url}
                     />
                 ))}
                 {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>}
