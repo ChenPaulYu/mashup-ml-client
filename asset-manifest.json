@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/mashup-ml-client/static/css/main.fe3ecda1.chunk.css",
-    "main.js": "/mashup-ml-client/static/js/main.4173c2d0.chunk.js",
-    "main.js.map": "/mashup-ml-client/static/js/main.4173c2d0.chunk.js.map",
+    "main.css": "/mashup-ml-client/static/css/main.2062b39b.chunk.css",
+    "main.js": "/mashup-ml-client/static/js/main.48cd98be.chunk.js",
+    "main.js.map": "/mashup-ml-client/static/js/main.48cd98be.chunk.js.map",
     "runtime-main.js": "/mashup-ml-client/static/js/runtime-main.67d63f80.js",
     "runtime-main.js.map": "/mashup-ml-client/static/js/runtime-main.67d63f80.js.map",
     "static/css/2.d5d3f7bc.chunk.css": "/mashup-ml-client/static/css/2.d5d3f7bc.chunk.css",
-    "static/js/2.b5d580e5.chunk.js": "/mashup-ml-client/static/js/2.b5d580e5.chunk.js",
-    "static/js/2.b5d580e5.chunk.js.map": "/mashup-ml-client/static/js/2.b5d580e5.chunk.js.map",
+    "static/js/2.5692b96d.chunk.js": "/mashup-ml-client/static/js/2.5692b96d.chunk.js",
+    "static/js/2.5692b96d.chunk.js.map": "/mashup-ml-client/static/js/2.5692b96d.chunk.js.map",
     "index.html": "/mashup-ml-client/index.html",
-    "precache-manifest.6681508f109c9dd6a2d2ab2c76edc48e.js": "/mashup-ml-client/precache-manifest.6681508f109c9dd6a2d2ab2c76edc48e.js",
+    "precache-manifest.4005bca6e3d93fb331ddc8df37db6dcf.js": "/mashup-ml-client/precache-manifest.4005bca6e3d93fb331ddc8df37db6dcf.js",
     "service-worker.js": "/mashup-ml-client/service-worker.js",
     "static/css/2.d5d3f7bc.chunk.css.map": "/mashup-ml-client/static/css/2.d5d3f7bc.chunk.css.map",
-    "static/css/main.fe3ecda1.chunk.css.map": "/mashup-ml-client/static/css/main.fe3ecda1.chunk.css.map",
-    "static/js/2.b5d580e5.chunk.js.LICENSE.txt": "/mashup-ml-client/static/js/2.b5d580e5.chunk.js.LICENSE.txt",
+    "static/css/main.2062b39b.chunk.css.map": "/mashup-ml-client/static/css/main.2062b39b.chunk.css.map",
+    "static/js/2.5692b96d.chunk.js.LICENSE.txt": "/mashup-ml-client/static/js/2.5692b96d.chunk.js.LICENSE.txt",
     "static/media/index.css": "/mashup-ml-client/static/media/roboto-latin-900italic.ebf6d164.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.67d63f80.js",
     "static/css/2.d5d3f7bc.chunk.css",
-    "static/js/2.b5d580e5.chunk.js",
-    "static/css/main.fe3ecda1.chunk.css",
-    "static/js/main.4173c2d0.chunk.js"
+    "static/js/2.5692b96d.chunk.js",
+    "static/css/main.2062b39b.chunk.css",
+    "static/js/main.48cd98be.chunk.js"
   ]
 }

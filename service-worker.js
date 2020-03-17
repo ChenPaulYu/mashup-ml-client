@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/mashup-ml-client/precache-manifest.6681508f109c9dd6a2d2ab2c76edc48e.js"
+  "/mashup-ml-client/precache-manifest.4005bca6e3d93fb331ddc8df37db6dcf.js"
 );
 
 self.addEventListener('message', (event) => {

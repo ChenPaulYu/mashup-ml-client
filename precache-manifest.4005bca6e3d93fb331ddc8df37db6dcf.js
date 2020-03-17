@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "60578ecb7b29f0b88fb5cef25d2ca671",
+    "revision": "9bcd07953b8dda5b3990fa815ad4cb5e",
     "url": "/mashup-ml-client/index.html"
   },
   {
-    "revision": "0243aeb7f2d83d938384",
+    "revision": "e69e511ce9f9f77b2447",
     "url": "/mashup-ml-client/static/css/2.d5d3f7bc.chunk.css"
   },
   {
-    "revision": "528e0a44e7316e902fff",
-    "url": "/mashup-ml-client/static/css/main.fe3ecda1.chunk.css"
+    "revision": "1cb2b8edce6f68b00471",
+    "url": "/mashup-ml-client/static/css/main.2062b39b.chunk.css"
   },
   {
-    "revision": "0243aeb7f2d83d938384",
-    "url": "/mashup-ml-client/static/js/2.b5d580e5.chunk.js"
+    "revision": "e69e511ce9f9f77b2447",
+    "url": "/mashup-ml-client/static/js/2.5692b96d.chunk.js"
   },
   {
     "revision": "8af0d53111a6e3782ff8ce95a2220491",
-    "url": "/mashup-ml-client/static/js/2.b5d580e5.chunk.js.LICENSE.txt"
+    "url": "/mashup-ml-client/static/js/2.5692b96d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "528e0a44e7316e902fff",
-    "url": "/mashup-ml-client/static/js/main.4173c2d0.chunk.js"
+    "revision": "1cb2b8edce6f68b00471",
+    "url": "/mashup-ml-client/static/js/main.48cd98be.chunk.js"
   },
   {
     "revision": "18ac4abce50014c04b6d",
