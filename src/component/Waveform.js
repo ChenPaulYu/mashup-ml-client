@@ -80,8 +80,8 @@ class Waveform extends Component {
     }
 
     componentDidMount() {
-        const { url, value, index, colors, chooseColumn } = this.props
-        this.setState({ url, value, index, colors, chooseColumn })
+        const { url, value, index, colors, chooseColumn, loadCompleted } = this.props
+        this.setState({ url, value, index, colors, chooseColumn, loadCompleted })
         if (url != null) {
             var player = new Player(url, () => {
                 let data = player.buffer.getChannelData()
@@ -97,15 +97,15 @@ class Waveform extends Component {
 
         if (prevProps == this.props) return
 
-        const { index, url, value, colors, mute } = this.props
+        const { index, url, value, colors, mute, currentLoadStatue } = this.props
 
-        
-        if (url != null && !this.state.player) {
+        if (url != null && (!this.state.player || currentLoadStatue == 1)) {
             if (prevState.url == url) return
             var player = new Player(`${ROOT_URL}?url=${url}`, () => {
                 let data = player.buffer.getChannelData()
                 this.drawWaveform(data, this.canvas.width, this.canvas.height, colors[0])
                 player.toMaster()
+                this.state.loadCompleted()
                 this.setState({ player, data })
             })
         }

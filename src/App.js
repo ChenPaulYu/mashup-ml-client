@@ -29,12 +29,15 @@ class App extends Component {
 
   getMainLoop(number) {
     let url = `http://140.109.21.190:5000/get_main_loop/${number}`
+    this.updateLoadStatue(0, 1)
     fetch(url, { method: 'GET' }).then((response) => {
-      if (!response.ok) throw new Error(response.statusText)
+      if (!response.ok) {
+        this.updateLoadStatue(0, 0)
+        throw new Error(response.statusText)
+      }
       return response.json()
     }).then((result) => {
       console.log('main loop')
-      this.updateLoadStatue(0, 1) // (index, value)
       let groupUrls_update
       if (this.state.groupUrls[0]) {
         groupUrls_update    = [result.main]
@@ -54,13 +57,16 @@ class App extends Component {
     }
 
 
+    this.updateLoadStatue(index + 1, 1)
 
     fetch(mashup_url, { method: 'GET' }).then((response) => {
-      if (!response.ok) throw new Error(response.statusText)
+      if (!response.ok) {
+        this.updateLoadStatue(index + 1, 0)
+        throw new Error(response.statusText)
+      }
         return response.json()
       }).then((result) => {
         console.log('accompany loop')
-        this.updateLoadStatue(index + 1, 1)
         let groupUrls_update = this.state.groupUrls
         groupUrls_update[index + 1] = result.rank.slice(0, 4)
         this.setState({ 'groupUrls': groupUrls_update })
@@ -125,12 +131,14 @@ class App extends Component {
               index={index}
               sequencer={this.state.sequencer}
               value={this.state.lockStatue[index]}
+              currentLoadStatue={this.state.loadStatue[index]}
               lockStatue={this.state.lockStatue}
-              urlsDecision={this.state.urlsDecision}
-              updateDecision={this.updateDecision}
               updateLockStatue={this.updateLockStatue}
-              toggleSequencer={this.toggleSequencer}
+              urlsDecision={this.state.urlsDecision}
               getNextLoop={(index != 0) ? this.getAccompanyLoop : this.getMainLoop}
+              updateDecision={this.updateDecision}
+              toggleSequencer={this.toggleSequencer}
+              updateLoadStatue={this.updateLoadStatue}
             />
           ))
         }

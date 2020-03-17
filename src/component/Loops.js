@@ -49,8 +49,14 @@ class Loops extends Component {
 
         let index = this.state.index
         let urls = this.state.urlsDecision
-        if (index == 0) this.state.getNextLoop(4)
-        else this.state.getNextLoop(index - 1, urls[index - 1])
+        console.log('change loop: ', index)
+        if (index == 0) {
+            this.state.getNextLoop(4)
+        }
+        else {
+            console.log(index - 1, urls)
+            this.state.getNextLoop(index - 1, urls[index - 1])
+        }
 
         console.log('change loop')
         this.chooseColumn(-1)
@@ -81,30 +87,30 @@ class Loops extends Component {
     }
 
     componentDidMount() {
-        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer  } = this.props
+        const { index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer, updateLoadStatue  } = this.props
         console.log('mount-', this.props)
-        this.setState({ index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer })
+        this.setState({ index, value, urls, updateLockStatue, getNextLoop, updateDecision, toggleSequencer, updateLoadStatue })
     }
 
     componentDidUpdate(prevProps, prevState) {
 
-        // if (prevState != this.state) {
-        //     if (this.state.loaded == 4) {
-        //         this.setState({ 'loaded': 0 })
-        //         this.state.updateLoadStatue(this.state.index, 0)
-        //         console.log(this.state.index, ': loadfinish')
-        //     }
-        // }
+        if (prevState != this.state) {
+            if (this.state.loaded == 4) {
+                this.setState({ 'loaded': 0 })
+                this.state.updateLoadStatue(this.state.index, 0)
+                console.log(this.state.index, ': loadfinish')
+            }
+        }
 
 
         if (prevProps != this.props) {
-            const { index, value, urls, lockStatue, sequencer } = this.props
+            const { index, value, urls, lockStatue, sequencer, currentLoadStatue, urlsDecision } = this.props
             if(sequencer != prevProps.sequencer) {
                 if(sequencer == 1) {
                     this.state.mute = true
                 } 
             }   
-            this.setState({ index, value, urls, lockStatue, sequencer })
+            this.setState({ index, value, urls, lockStatue, sequencer, currentLoadStatue, urlsDecision })
         }
 
     }
@@ -118,14 +124,16 @@ class Loops extends Component {
                         key={index}
                         index={index}
                         value={value}
-                        group_index={this.state.index}
                         mute={this.state.mute}
+                        group_index={this.state.index}
                         url={this.state.urls == null ? null : this.state.urls[index]}
                         colors={colors}
                         chooseColumn={this.chooseColumn}
+                        loadCompleted={this.loadCompleted}
+                        currentLoadStatue={this.state.currentLoadStatue}    
                     />
                 ))}
-                {/* {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>} */}
+                {(!this.state.value && !this.state.currentLoadStatue) ? <button className='main-btn' onClick={this.changeLoop}>Change</button> : <button className='sub-btn'>Later</button>}
                 <button className={this.state.value?'sub-btn':'main-btn'} onClick={this.toggleLock}>{this.state.value ? 'unLock' : 'Lock'}</button>
                 {(this.state.mute) ? <button className='sub-btn' onClick={this.toggleMute}>unMute</button> : <button className='main-btn' onClick={this.toggleMute}>Mute</button>}
             </div>
